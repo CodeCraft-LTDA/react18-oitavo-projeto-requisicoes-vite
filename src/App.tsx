@@ -1,7 +1,17 @@
+import { useState } from "react";
+
+type Post = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
 const App = () => {
+  const [postsData, setPostsData] = useState<Post[]>([]);
 
   const handleGetPosts = async () => {
-    const posts = await fetch('https://jsonplaceholder.typicode.com/posts',
+    const postsRequest = await fetch('https://jsonplaceholder.typicode.com/posts',
       {
         method: 'GET',
         headers: {
@@ -9,13 +19,25 @@ const App = () => {
         },
       }
     );
-    const dataJson = await posts.json();
-    console.log(dataJson);
+    // const dataJson = await posts.json();
+    // console.log(dataJson);
+
+    const posts: Post[] = await postsRequest.json();
+    setPostsData(posts);
   }
 
   return (
     <div>
       <button onClick={handleGetPosts}>Get Posts</button>
+
+      <ul>
+        {postsData.map((post) => (
+          <li key={post.id}>
+            <h3>{post.title}</h3>
+            <p>{post.body}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
