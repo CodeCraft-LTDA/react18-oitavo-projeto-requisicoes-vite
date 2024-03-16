@@ -38,9 +38,74 @@ const App = () => {
     setLoading(false);
   }
 
+  const handlePostPost = async () => {
+    setLoading(true);
+
+    try {
+      const postRequest = await fetch('https://jsonplaceholder.typicode.com/posts',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: 'foo',
+            body: 'bar',
+            userId: 1,
+          }),
+        }
+      );
+      // const dataJson = await posts.json();
+      // console.log(dataJson);
+
+      const post: Post = await postRequest.json();
+
+      setPostsData([...postsData, post]);
+        
+    } catch (error) {
+      setError('Error getting posts');
+    }
+
+    setLoading(false);
+  }
+
+  const handlePutPost = async () => {
+    setLoading(true);
+
+    try {
+      const postRequest = await fetch('https://jsonplaceholder.typicode.com/posts/1',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: 1,
+            title: 'foo',
+            body: 'bar',
+            userId: 1,
+          }),
+        }
+      );
+      // const dataJson = await posts.json();
+      // console.log(dataJson);
+
+      const post: Post = await postRequest.json();
+
+      setPostsData([...postsData, post]);
+        
+    } catch (error) {
+      setError('Error getting posts');
+    }
+
+    setLoading(false);
+  }
+
   return (
     <div>
       <button onClick={handleGetPosts}>Get Posts</button>
+      <button onClick={handlePostPost}>Post Post</button>
+      <button onClick={handlePutPost}>Put Post</button>
 
       {loading && <p>Loading...</p>}
       
